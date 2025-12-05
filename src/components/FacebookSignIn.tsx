@@ -1,0 +1,142 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import imgImage275 from "figma:asset/b6f418954360856b476df1766dac24ff31cd67db.png";
+import { toast } from "sonner@2.0.3";
+
+export default function FacebookSignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    if (!email || !password) {
+      toast.error("Please enter both email and password");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    toast.success("Signed in with Facebook successfully!");
+    setTimeout(() => {
+      navigate("/home");
+    }, 1000);
+  };
+
+  return (
+    <div className="bg-[#f0f2f5] min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center justify-center size-[40px] rounded-full hover:bg-[#1F75BE]/10 transition-all active:scale-95 border border-gray-200 hover:border-[#1F75BE] mb-6"
+        >
+          <svg className="size-[24px]" fill="none" viewBox="0 0 24 24">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="#1F75BE" />
+          </svg>
+        </button>
+
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          {/* Facebook Logo */}
+          <div className="flex justify-center mb-6">
+            <div className="size-16">
+              <img alt="Facebook" className="size-full object-contain" src={imgImage275} />
+            </div>
+          </div>
+
+          <div className="text-center mb-6">
+            <h1 className="text-2xl mb-2">Log in to Facebook</h1>
+          </div>
+
+          {/* Input Fields */}
+          <div className="space-y-4 mb-4">
+            {/* Email Field */}
+            <div className="bg-white h-14 relative rounded-lg shrink-0 w-full group">
+              <div className="content-stretch flex flex-col h-14 items-start overflow-clip relative rounded-[inherit] w-full">
+                <div className="basis-0 bg-[#f5f6f7] content-stretch flex flex-col gap-[10px] grow items-start min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                  <div className="basis-0 bg-[#f5f6f7] grow min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                    <div className="size-full">
+                      <div className="box-border content-stretch flex gap-2 items-center px-4 py-3 relative size-full">
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Email or phone number"
+                          className="basis-0 grow min-h-px min-w-px bg-transparent border-none outline-none text-[#121314] placeholder:text-gray-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div aria-hidden="true" className="absolute border border-gray-300 border-solid inset-[-0.5px] pointer-events-none rounded-lg group-focus-within:border-[#1877f2] group-focus-within:border-2 transition-all" />
+            </div>
+
+            {/* Password Field */}
+            <div className="content-stretch flex flex-col h-14 items-start relative rounded-lg shrink-0 w-full group">
+              <div aria-hidden="true" className="absolute border border-gray-300 border-solid inset-[-0.5px] pointer-events-none rounded-lg group-focus-within:border-[#1877f2] group-focus-within:border-2 transition-all" />
+              <div className="basis-0 bg-[#f5f6f7] content-stretch flex flex-col gap-[10px] grow items-start min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                <div className="basis-0 bg-[#f5f6f7] grow min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                  <div className="size-full">
+                    <div className="box-border content-stretch flex gap-2 items-center px-4 py-3 relative size-full">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        className="basis-0 grow min-h-px min-w-px bg-transparent border-none outline-none text-[#121314] placeholder:text-gray-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="flex items-center justify-center shrink-0 size-10 hover:bg-gray-200 rounded-full transition-colors"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-5" color="#121314" />
+                        ) : (
+                          <Eye className="size-5" color="#121314" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sign In Button */}
+          <button
+            onClick={handleSignIn}
+            className="w-full bg-[#1877f2] hover:bg-[#166fe5] transition-colors rounded-lg h-12 flex items-center justify-center text-white mb-4"
+          >
+            Log In
+          </button>
+
+          {/* Forgot Password */}
+          <div className="text-center mb-4">
+            <span 
+              onClick={() => navigate("/forgot-password/facebook")}
+              className="text-[#1877f2] text-sm cursor-pointer hover:underline"
+            >
+              Forgotten password?
+            </span>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-gray-300 my-6" />
+
+          {/* Create Account Button */}
+          <div className="text-center">
+            <button className="bg-[#42b72a] hover:bg-[#36a420] transition-colors rounded-lg px-6 py-3 text-white">
+              Create new account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

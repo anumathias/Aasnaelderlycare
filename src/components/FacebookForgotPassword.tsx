@@ -1,0 +1,198 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import imgImage275 from "figma:asset/b6f418954360856b476df1766dac24ff31cd67db.png";
+import { toast } from "sonner@2.0.3";
+
+export default function FacebookForgotPassword() {
+  const [step, setStep] = useState<"email" | "reset">("email");
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSendCode = () => {
+    if (!email) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    toast.success("Verification code sent to your email!");
+    setStep("reset");
+  };
+
+  const handleResetPassword = () => {
+    if (!newPassword || !confirmPassword) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    toast.success("Password reset successfully!");
+    setTimeout(() => {
+      navigate("/signin/facebook");
+    }, 1000);
+  };
+
+  return (
+    <div className="bg-[#f0f2f5] min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/signin/facebook")}
+          className="flex items-center justify-center size-[40px] rounded-full hover:bg-[#1F75BE]/10 transition-all active:scale-95 border border-gray-200 hover:border-[#1F75BE] mb-6"
+        >
+          <svg className="size-[24px]" fill="none" viewBox="0 0 24 24">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="#1F75BE" />
+          </svg>
+        </button>
+
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          {/* Facebook Logo */}
+          <div className="flex justify-center mb-6">
+            <div className="size-16">
+              <img alt="Facebook" className="size-full object-contain" src={imgImage275} />
+            </div>
+          </div>
+
+          {step === "email" ? (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="text-2xl mb-2">Find Your Account</h1>
+                <p className="text-gray-600">Enter your email to reset your password</p>
+              </div>
+
+              {/* Email Field */}
+              <div className="mb-6">
+                <div className="bg-white h-14 relative rounded-lg shrink-0 w-full group">
+                  <div className="content-stretch flex flex-col h-14 items-start overflow-clip relative rounded-[inherit] w-full">
+                    <div className="basis-0 bg-[#f5f6f7] content-stretch flex flex-col gap-[10px] grow items-start min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                      <div className="basis-0 bg-[#f5f6f7] grow min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                        <div className="size-full">
+                          <div className="box-border content-stretch flex gap-2 items-center px-4 py-3 relative size-full">
+                            <input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder="Email address"
+                              className="basis-0 grow min-h-px min-w-px bg-transparent border-none outline-none text-[#121314] placeholder:text-gray-500"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div aria-hidden="true" className="absolute border border-gray-300 border-solid inset-[-0.5px] pointer-events-none rounded-lg group-focus-within:border-[#1877f2] group-focus-within:border-2 transition-all" />
+                </div>
+              </div>
+
+              {/* Send Code Button */}
+              <button
+                onClick={handleSendCode}
+                className="w-full bg-[#1877f2] hover:bg-[#166fe5] transition-colors rounded-lg h-12 flex items-center justify-center text-white"
+              >
+                Send Verification Code
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="text-2xl mb-2">Create New Password</h1>
+                <p className="text-gray-600">Enter your new password</p>
+              </div>
+
+              {/* Input Fields */}
+              <div className="space-y-4 mb-6">
+                {/* New Password Field */}
+                <div className="content-stretch flex flex-col h-14 items-start relative rounded-lg shrink-0 w-full group">
+                  <div aria-hidden="true" className="absolute border border-gray-300 border-solid inset-[-0.5px] pointer-events-none rounded-lg group-focus-within:border-[#1877f2] group-focus-within:border-2 transition-all" />
+                  <div className="basis-0 bg-[#f5f6f7] content-stretch flex flex-col gap-[10px] grow items-start min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                    <div className="basis-0 bg-[#f5f6f7] grow min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                      <div className="size-full">
+                        <div className="box-border content-stretch flex gap-2 items-center px-4 py-3 relative size-full">
+                          <input
+                            type={showNewPassword ? "text" : "password"}
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="New password"
+                            className="basis-0 grow min-h-px min-w-px bg-transparent border-none outline-none text-[#121314] placeholder:text-gray-500"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                            className="flex items-center justify-center shrink-0 size-10 hover:bg-gray-200 rounded-full transition-colors"
+                          >
+                            {showNewPassword ? (
+                              <EyeOff className="size-5" color="#121314" />
+                            ) : (
+                              <Eye className="size-5" color="#121314" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Confirm Password Field */}
+                <div className="content-stretch flex flex-col h-14 items-start relative rounded-lg shrink-0 w-full group">
+                  <div aria-hidden="true" className="absolute border border-gray-300 border-solid inset-[-0.5px] pointer-events-none rounded-lg group-focus-within:border-[#1877f2] group-focus-within:border-2 transition-all" />
+                  <div className="basis-0 bg-[#f5f6f7] content-stretch flex flex-col gap-[10px] grow items-start min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                    <div className="basis-0 bg-[#f5f6f7] grow min-h-px min-w-px relative rounded-lg shrink-0 w-full">
+                      <div className="size-full">
+                        <div className="box-border content-stretch flex gap-2 items-center px-4 py-3 relative size-full">
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm password"
+                            className="basis-0 grow min-h-px min-w-px bg-transparent border-none outline-none text-[#121314] placeholder:text-gray-500"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="flex items-center justify-center shrink-0 size-10 hover:bg-gray-200 rounded-full transition-colors"
+                          >
+                            {showConfirmPassword ? (
+                              <EyeOff className="size-5" color="#121314" />
+                            ) : (
+                              <Eye className="size-5" color="#121314" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Reset Password Button */}
+              <button
+                onClick={handleResetPassword}
+                className="w-full bg-[#1877f2] hover:bg-[#166fe5] transition-colors rounded-lg h-12 flex items-center justify-center text-white"
+              >
+                Reset Password
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
